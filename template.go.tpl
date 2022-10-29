@@ -18,7 +18,7 @@ func init() {
 }
 {{range .Methods}}
 {{if eq .Method "GET"}}
-func (s *s{{$.Name}}Client) {{ .HandlerName }} (ctx context.Context, in *model.{{ .HandlerName }}Input) (out *model.{{ .HandlerName }}Output, err error) {
+func (s *s{{$.Name}}Client) {{ .FunctionName }} (ctx context.Context, in *{{ .FunctionName }}Input) (out *{{ .FunctionName }}Output, err error) {
 	server, _ := g.Cfg().Get(ctx, "serverUri.xxxServer")
 	if _, err := g.Client().{{.Method}}(
 		ctx,
@@ -27,17 +27,18 @@ func (s *s{{$.Name}}Client) {{ .HandlerName }} (ctx context.Context, in *model.{
 			"id": in.Id,
 		},
 	); err != nil {
-		g.Log().Errorf(ctx, "s{{$.Name}}Client {{ .HandlerName }} Client error %v", err)
-		return gerror.NewCode(gcode.CodeInternalError, common_consts.MessageSystemBusy)
+		g.Log().Errorf(ctx, "s{{$.Name}}Client {{ .FunctionName }} Client error %v", err)
+		return nil, gerror.NewCode(gcode.CodeInternalError, common_consts.MessageSystemBusy)
 	}
-	return nil
+
+	return &model.{{ .FunctionName }}Output{}, nil
 }
 
-type {{ .HandlerName }}Req struct {
+type {{ .FunctionName }}Input struct {
 
 }
 
-type {{ .HandlerName }}Res struct {
+type {{ .FunctionName }}Output struct {
 
 }
 {{else if eq .Method "POST"}}
