@@ -19,7 +19,7 @@ func init() {
 {{range .Methods}}
 {{if eq .Method "GET"}}
 func (s *s{{$.Name}}Client) {{ .FunctionName }} (ctx context.Context, in *{{ .FunctionName }}Input) (out *{{ .FunctionName }}Output, err error) {
-	server, _ := g.Cfg().Get(ctx, "serverUri.xxxServer")
+	server, _ := g.Cfg().Get(ctx, "serverUri.{{$.LowerServiceName}}Server")
 	if _, err := g.Client().{{.Method}}(
 		ctx,
 		fmt.Sprintf("%s{{.Path}}", server),
@@ -35,11 +35,15 @@ func (s *s{{$.Name}}Client) {{ .FunctionName }} (ctx context.Context, in *{{ .Fu
 }
 
 type {{ .FunctionName }}Input struct {
-
+    {{range .Request.Fields }}
+        {{ .Name}} {{ .Type}}
+    {{end}}
 }
 
 type {{ .FunctionName }}Output struct {
-
+    {{range .Response.Fields }}
+        {{ .Name}} {{ .Type}}
+    {{end}}
 }
 {{else if eq .Method "POST"}}
 

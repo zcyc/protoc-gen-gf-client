@@ -195,10 +195,15 @@ func buildMethodDesc(g *protogen.GeneratedFile, m *protogen.Method, method, path
 	// request 字段
 	var inputFields []*field
 	for _, f := range m.Input.Fields {
-		inputFields = append(inputFields, &field{
+		fd := &field{
 			Name: f.GoName,
-			Type: f.Desc.Kind().String(),
-		})
+		}
+		if f.Desc.Kind().String() == "message" {
+			fd.Type = f.Message.GoIdent.GoName
+		} else {
+			fd.Type = f.Desc.Kind().String()
+		}
+		inputFields = append(inputFields, fd)
 	}
 	request := &message{
 		Name:   g.QualifiedGoIdent(m.Input.GoIdent),
@@ -208,10 +213,15 @@ func buildMethodDesc(g *protogen.GeneratedFile, m *protogen.Method, method, path
 	// response 字段
 	var outputFields []*field
 	for _, f := range m.Output.Fields {
-		outputFields = append(outputFields, &field{
+		fd := &field{
 			Name: f.GoName,
-			Type: f.Desc.Kind().String(),
-		})
+		}
+		if f.Desc.Kind().String() == "message" {
+			fd.Type = f.Message.GoIdent.GoName
+		} else {
+			fd.Type = f.Desc.Kind().String()
+		}
+		outputFields = append(outputFields, fd)
 	}
 	response := &message{
 		Name:   g.QualifiedGoIdent(m.Output.GoIdent),
