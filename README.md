@@ -1,5 +1,5 @@
 # protoc-gen-gf-client
-从 protobuf 文件中生成使用 goframe 的接口调用方法
+Generate [GoFrame](https://github.com/gogf/gf) client via ProtoBuf
 
-## 使用说明
-见主仓库 [protoc-gen-gf](https://github.com/zcyc/protoc-gen-gf)
+## Usage
+[protoc-gen-gf](https://github.com/zcyc/protoc-gen-gf)
